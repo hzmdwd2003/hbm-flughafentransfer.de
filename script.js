@@ -341,17 +341,17 @@ const HOME_PRICE_GROUPS = {
     ['Offenbach / Neu-Isenburg / Bad Vilbel → FRA', 'ab 35 €', 'kurze Strecke aus dem östlichen Rhein-Main-Gebiet'],
     ['Taunus / Hofheim / Bad Soden / Kelkheim → FRA', 'ab 45 €', 'abhängig vom genauen Abholort'],
     ['Hanau / Bruchköbel / Wetterau / Aschaffenburg → FRA', 'ab 55 €', 'je nach Strecke und Uhrzeit'],
-    ['Gießen / Marburg / Fulda → FRA', 'ab 99 €', 'längere Strecke zum Frankfurt Airport'],
-    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'ab 99 €', 'direkter Flughafentransfer ohne Umsteigen'],
-    ['Stuttgart / Karlsruhe / Heilbronn / Köln → FRA', 'ab 169 €', 'Fernstrecke je nach Abholort und Verfügbarkeit']
+    ['Gießen / Marburg / Fulda → FRA', 'ab 69 €', 'längere Strecke zum Frankfurt Airport'],
+    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'ab 89 €', 'direkter Flughafentransfer ohne Umsteigen'],
+    ['Stuttgart / Karlsruhe / Heilbronn / Köln → FRA', 'ab 149 €', 'Fernstrecke je nach Abholort und Verfügbarkeit']
   ],
   en: [
     ['Offenbach / Neu-Isenburg / Bad Vilbel → FRA', 'from €35', 'short transfer from the eastern Rhine-Main area'],
     ['Taunus / Hofheim / Bad Soden / Kelkheim → FRA', 'from €45', 'depending on the exact pickup point'],
     ['Hanau / Bruchköbel / Wetterau / Aschaffenburg → FRA', 'from €55', 'depending on route and time'],
-    ['Gießen / Marburg / Fulda → FRA', 'from €99', 'longer transfer to Frankfurt Airport'],
-    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'from €99', 'direct airport transfer without changing'],
-    ['Stuttgart / Karlsruhe / Heilbronn / Cologne → FRA', 'from €169', 'long-distance transfer depending on pickup point']
+    ['Gießen / Marburg / Fulda → FRA', 'from €69', 'longer transfer to Frankfurt Airport'],
+    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'from €89', 'direct airport transfer without changing'],
+    ['Stuttgart / Karlsruhe / Heilbronn / Cologne → FRA', 'from €149', 'long-distance transfer depending on pickup point']
   ]
 };
 
@@ -370,15 +370,15 @@ function createAreaSection() {
     ['Taunus & Main-Taunus', 'Bad Homburg, Friedrichsdorf, Hofheim, Kelkheim, Bad Soden, Kronberg', 'from €45'],
     ['Wetterau & Central Hesse', 'Bad Nauheim, Butzbach, Gießen, Marburg, Alsfeld, Bad Hersfeld, Fulda', 'from €55'],
     ['Darmstadt & South Hesse', 'Darmstadt, Seeheim-Jugenheim, Pfungstadt, Ober-Ramstadt, Dieburg, Groß-Umstadt, Aschaffenburg', 'from €39'],
-    ['Rhine-Neckar & Palatinate', 'Mannheim, Heidelberg, Worms, Speyer, Kaiserslautern, Bad Kreuznach, Rüdesheim am Rhein, Idar-Oberstein', 'from €99'],
-    ['Long-distance routes', 'Limburg, Koblenz, Neuwied, Heilbronn, Pforzheim, Karlsruhe, Stuttgart, Cologne', 'from €109']
+    ['Rhine-Neckar & Palatinate', 'Mannheim, Heidelberg, Worms, Speyer, Kaiserslautern, Bad Kreuznach, Rüdesheim am Rhein, Idar-Oberstein', 'from €89'],
+    ['Long-distance routes', 'Limburg, Koblenz, Neuwied, Heilbronn, Pforzheim, Karlsruhe, Stuttgart, Cologne', 'from €99']
   ] : [
     ['Frankfurt & Offenbach', 'Frankfurt, Offenbach, Bad Vilbel, Karben, Bruchköbel, Gelnhausen, Obertshausen, Seligenstadt', 'ab 29 €'],
     ['Taunus & Main-Taunus', 'Bad Homburg, Friedrichsdorf, Hofheim, Kelkheim, Bad Soden, Kronberg', 'ab 45 €'],
     ['Wetterau & Mittelhessen', 'Bad Nauheim, Butzbach, Gießen, Marburg, Alsfeld, Bad Hersfeld, Fulda', 'ab 55 €'],
     ['Darmstadt & Südhessen', 'Darmstadt, Seeheim-Jugenheim, Pfungstadt, Ober-Ramstadt, Dieburg, Groß-Umstadt, Aschaffenburg', 'ab 39 €'],
-    ['Rhein-Neckar & Pfalz', 'Mannheim, Heidelberg, Worms, Speyer, Kaiserslautern, Bad Kreuznach, Rüdesheim am Rhein, Idar-Oberstein', 'ab 99 €'],
-    ['Weitere Fernstrecken', 'Limburg, Koblenz, Neuwied, Heilbronn, Pforzheim, Karlsruhe, Stuttgart, Köln', 'ab 109 €']
+    ['Rhein-Neckar & Pfalz', 'Mannheim, Heidelberg, Worms, Speyer, Kaiserslautern, Bad Kreuznach, Rüdesheim am Rhein, Idar-Oberstein', 'ab 89 €'],
+    ['Weitere Fernstrecken', 'Limburg, Koblenz, Neuwied, Heilbronn, Pforzheim, Karlsruhe, Stuttgart, Köln', 'ab 99 €']
   ];
 
   const cards = groups.map(([title, cities, price]) => `
@@ -446,17 +446,17 @@ function enhanceHahnPrices() {
   if (!isHahnPage) return;
 
   const heroPrice = document.querySelector('.page-hero .price-hook strong');
-  if (heroPrice) heroPrice.textContent = isEnglish ? 'from €149' : 'ab 149 €';
+  if (heroPrice) heroPrice.textContent = isEnglish ? 'from €129' : 'ab 129 €';
 
   const prices = {
-    hhn_route_frankfurt: isEnglish ? 'from €149' : 'ab 149 €',
-    en_hhn_route_frankfurt: 'from €149',
+    hhn_route_frankfurt: isEnglish ? 'from €129' : 'ab 129 €',
+    en_hhn_route_frankfurt: 'from €129',
     hhn_route_mainz: isEnglish ? 'from €119' : 'ab 119 €',
     en_hhn_route_mainz: 'from €119',
-    hhn_route_wiesbaden: isEnglish ? 'from €129' : 'ab 129 €',
-    en_hhn_route_wiesbaden: 'from €129',
-    hhn_route_offenbach: isEnglish ? 'from €159' : 'ab 159 €',
-    en_hhn_route_offenbach: 'from €159'
+    hhn_route_wiesbaden: isEnglish ? 'from €119' : 'ab 119 €',
+    en_hhn_route_wiesbaden: 'from €119',
+    hhn_route_offenbach: isEnglish ? 'from €129' : 'ab 129 €',
+    en_hhn_route_offenbach: 'from €129'
   };
 
   document.querySelectorAll('.route[data-source]').forEach((route) => {
