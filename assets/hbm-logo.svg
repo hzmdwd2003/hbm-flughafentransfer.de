@@ -1,5 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 90" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 244" role="img" aria-labelledby="title desc">
   <title id="title">HBM</title>
-  <desc id="desc">HBM Wortmarke</desc>
-  <text x="0" y="68" fill="#0a0a0a" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-4">HBM</text>
+  <desc id="desc">Ineinander verschachteltes HBM-Logo in der Typografie der Website</desc>
+  <g fill="#0a0a0a" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700">
+    <text x="50" y="182" font-size="190">H</text>
+    <text x="142" y="166" font-size="210">B</text>
+    <text x="195" y="231" font-size="165">M</text>
+  </g>
 </svg>
