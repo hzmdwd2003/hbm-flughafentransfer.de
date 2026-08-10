@@ -204,6 +204,27 @@ function initDirectWhatsAppLinks() {
   });
 }
 
+function initServiceCards() {
+  document.querySelectorAll('.service-card').forEach((card) => {
+    const link = card.querySelector('a[href]');
+    if (!link) return;
+    card.setAttribute('role', 'link');
+    card.setAttribute('tabindex', '0');
+
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('a')) return;
+      window.location.href = link.href;
+    });
+
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        window.location.href = link.href;
+      }
+    });
+  });
+}
+
 function initMobileNav() {
   const toggle = document.querySelector('[data-nav-toggle]');
   const nav = document.querySelector('[data-nav]');
@@ -216,4 +237,5 @@ function initMobileNav() {
 initConsent();
 initInquiryForms();
 initDirectWhatsAppLinks();
+initServiceCards();
 initMobileNav();
