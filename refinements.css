@@ -18,7 +18,9 @@
 .service-areas-section{border-top:1px solid var(--line)}
 .area-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .area-card{border:1px solid var(--line);border-radius:var(--radius);padding:24px;background:#fff;min-height:180px}
-.area-card h3{margin:0 0 12px;font-size:20px;letter-spacing:-.025em}
+.area-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:12px}
+.area-card h3{margin:0;font-size:20px;letter-spacing:-.025em}
+.area-price{flex:0 0 auto;font-size:17px;letter-spacing:-.025em;white-space:nowrap}
 .area-card p{margin:0;color:var(--grey);font-size:14px;line-height:1.75}
 .area-cta{margin-top:28px}
 
@@ -34,6 +36,7 @@
   .page-hero-copy h1{font-size:clamp(44px,14vw,68px)}
   .area-grid{grid-template-columns:1fr}
   .area-card{min-height:0}
+  .area-card-head{align-items:center}
   .price-grid[data-expanded="true"]{grid-template-columns:1fr}
   .card-head{align-items:flex-start}
   .card-label{flex:0 0 auto}
