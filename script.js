@@ -336,6 +336,25 @@ function initSubpageHeroForm() {
   if (oldSplit && oldSplit.children.length === 1) oldSplit.classList.add('split-single');
 }
 
+const HOME_PRICE_GROUPS = {
+  de: [
+    ['Offenbach / Neu-Isenburg / Bad Vilbel → FRA', 'ab 35 €', 'kurze Strecke aus dem östlichen Rhein-Main-Gebiet'],
+    ['Taunus / Hofheim / Bad Soden / Kelkheim → FRA', 'ab 45 €', 'abhängig vom genauen Abholort'],
+    ['Hanau / Bruchköbel / Wetterau / Aschaffenburg → FRA', 'ab 55 €', 'je nach Strecke und Uhrzeit'],
+    ['Gießen / Marburg / Fulda → FRA', 'ab 99 €', 'längere Strecke zum Frankfurt Airport'],
+    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'ab 99 €', 'direkter Flughafentransfer ohne Umsteigen'],
+    ['Stuttgart / Karlsruhe / Heilbronn / Köln → FRA', 'ab 169 €', 'Fernstrecke je nach Abholort und Verfügbarkeit']
+  ],
+  en: [
+    ['Offenbach / Neu-Isenburg / Bad Vilbel → FRA', 'from €35', 'short transfer from the eastern Rhine-Main area'],
+    ['Taunus / Hofheim / Bad Soden / Kelkheim → FRA', 'from €45', 'depending on the exact pickup point'],
+    ['Hanau / Bruchköbel / Wetterau / Aschaffenburg → FRA', 'from €55', 'depending on route and time'],
+    ['Gießen / Marburg / Fulda → FRA', 'from €99', 'longer transfer to Frankfurt Airport'],
+    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'from €99', 'direct airport transfer without changing'],
+    ['Stuttgart / Karlsruhe / Heilbronn / Cologne → FRA', 'from €169', 'long-distance transfer depending on pickup point']
+  ]
+};
+
 function createAreaSection() {
   const faq = document.querySelector('#faq');
   if (!faq || document.querySelector('[data-service-areas]')) return;
@@ -346,24 +365,31 @@ function createAreaSection() {
   section.id = isEnglish ? 'service-areas' : 'einsatzgebiet';
   section.dataset.serviceAreas = 'true';
 
-  const groups = [
-    ['Frankfurt & Offenbach', 'Frankfurt, Offenbach, Bad Vilbel, Karben, Bruchköbel, Gelnhausen, Obertshausen, Seligenstadt'],
-    ['Taunus & Main-Taunus', 'Bad Homburg, Friedrichsdorf, Hofheim, Kelkheim, Bad Soden, Kronberg'],
-    ['Wetterau & Mittelhessen', 'Bad Nauheim, Butzbach, Gießen, Marburg, Alsfeld, Bad Hersfeld, Fulda'],
-    ['Darmstadt & Südhessen', 'Darmstadt, Seeheim-Jugenheim, Pfungstadt, Ober-Ramstadt, Dieburg, Groß-Umstadt, Aschaffenburg'],
-    ['Rhein-Neckar & Pfalz', 'Mannheim, Heidelberg, Worms, Speyer, Kaiserslautern, Bad Kreuznach, Rüdesheim am Rhein, Idar-Oberstein'],
-    ['Weitere Fernstrecken', 'Limburg, Koblenz, Neuwied, Heilbronn, Pforzheim, Karlsruhe, Stuttgart, Köln']
+  const groups = isEnglish ? [
+    ['Frankfurt & Offenbach', 'Frankfurt, Offenbach, Bad Vilbel, Karben, Bruchköbel, Gelnhausen, Obertshausen, Seligenstadt', 'from €29'],
+    ['Taunus & Main-Taunus', 'Bad Homburg, Friedrichsdorf, Hofheim, Kelkheim, Bad Soden, Kronberg', 'from €45'],
+    ['Wetterau & Central Hesse', 'Bad Nauheim, Butzbach, Gießen, Marburg, Alsfeld, Bad Hersfeld, Fulda', 'from €55'],
+    ['Darmstadt & South Hesse', 'Darmstadt, Seeheim-Jugenheim, Pfungstadt, Ober-Ramstadt, Dieburg, Groß-Umstadt, Aschaffenburg', 'from €39'],
+    ['Rhine-Neckar & Palatinate', 'Mannheim, Heidelberg, Worms, Speyer, Kaiserslautern, Bad Kreuznach, Rüdesheim am Rhein, Idar-Oberstein', 'from €99'],
+    ['Long-distance routes', 'Limburg, Koblenz, Neuwied, Heilbronn, Pforzheim, Karlsruhe, Stuttgart, Cologne', 'from €109']
+  ] : [
+    ['Frankfurt & Offenbach', 'Frankfurt, Offenbach, Bad Vilbel, Karben, Bruchköbel, Gelnhausen, Obertshausen, Seligenstadt', 'ab 29 €'],
+    ['Taunus & Main-Taunus', 'Bad Homburg, Friedrichsdorf, Hofheim, Kelkheim, Bad Soden, Kronberg', 'ab 45 €'],
+    ['Wetterau & Mittelhessen', 'Bad Nauheim, Butzbach, Gießen, Marburg, Alsfeld, Bad Hersfeld, Fulda', 'ab 55 €'],
+    ['Darmstadt & Südhessen', 'Darmstadt, Seeheim-Jugenheim, Pfungstadt, Ober-Ramstadt, Dieburg, Groß-Umstadt, Aschaffenburg', 'ab 39 €'],
+    ['Rhein-Neckar & Pfalz', 'Mannheim, Heidelberg, Worms, Speyer, Kaiserslautern, Bad Kreuznach, Rüdesheim am Rhein, Idar-Oberstein', 'ab 99 €'],
+    ['Weitere Fernstrecken', 'Limburg, Koblenz, Neuwied, Heilbronn, Pforzheim, Karlsruhe, Stuttgart, Köln', 'ab 109 €']
   ];
 
-  const cards = groups.map(([title, cities]) => `
-    <article class="area-card"><h3>${title}</h3><p>${cities}</p></article>`).join('');
+  const cards = groups.map(([title, cities, price]) => `
+    <article class="area-card"><div class="area-card-head"><h3>${title}</h3><strong class="area-price">${price}</strong></div><p>${cities}</p></article>`).join('');
 
   section.innerHTML = `
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">${isEnglish ? 'Pickup areas' : 'Abholorte & Regionen'}</span>
         <h2>${isEnglish ? 'Airport transfers beyond Frankfurt.' : 'Nicht nur Frankfurt: Wir fahren auch aus der Region.'}</h2>
-        <p>${isEnglish ? 'These are examples of frequently requested pickup areas. Other locations and longer routes can also be requested directly.' : 'Das sind Beispiele für häufig angefragte Abholorte. Auch andere Orte und längere Strecken kannst du direkt anfragen.'}</p>
+        <p>${isEnglish ? 'These are examples of frequently requested pickup areas. The displayed amounts are starting prices; the exact fixed price is confirmed before booking.' : 'Das sind Beispiele für häufig angefragte Abholorte. Die genannten Beträge sind Ab-Preise; den genauen Festpreis bestätigen wir vor der Buchung.'}</p>
       </div>
       <div class="area-grid">${cards}</div>
       <div class="compare-strip area-cta"><div><strong>${isEnglish ? 'Your city is not listed?' : 'Dein Ort ist nicht dabei?'}</strong><p>${isEnglish ? 'Send us your pickup location and airport. We will check the route and quote a fixed price.' : 'Schick uns Abholort und Flughafen. Wir prüfen die Strecke und nennen dir einen Festpreis.'}</p></div><a class="btn btn-whatsapp" data-whatsapp data-source="${isEnglish ? 'en_prices' : 'prices_cta'}" href="https://wa.me/${HBM.whatsappNumber}?text=${encodeURIComponent(isEnglish ? 'Hello HBM, I would like a price for an airport transfer.\nPickup: \nAirport/destination: \nDate/time: ' : 'Hallo HBM, ich möchte einen Preis für einen Flughafentransfer anfragen.\nAbholort: \nFlughafen/Ziel: \nDatum/Uhrzeit: ')}" target="_blank" rel="noopener">${isEnglish ? 'Request your route' : 'Strecke anfragen'}</a></div>
@@ -372,34 +398,72 @@ function createAreaSection() {
   faq.parentNode.insertBefore(section, faq);
 }
 
+function appendPriceCards(grid, items) {
+  items.forEach(([route, price, note]) => {
+    const card = document.createElement('article');
+    card.className = 'price-card price-card-more';
+    card.innerHTML = `<span>${route}</span><strong>${price}</strong><small>${note}</small>`;
+    grid.appendChild(card);
+  });
+}
+
+function moveXlCardToEnd(grid) {
+  const xlCard = [...grid.querySelectorAll('.price-card')].find((card) => /\bXL\b/i.test(card.textContent));
+  if (xlCard) grid.appendChild(xlCard);
+}
+
 function expandHomePrices() {
   const priceSection = document.querySelector(currentLanguage() === 'en' ? '#prices' : '#preise');
   const grid = priceSection?.querySelector('.price-grid');
   if (!grid || grid.dataset.expanded === 'true') return;
   grid.dataset.expanded = 'true';
 
-  const isEnglish = currentLanguage() === 'en';
-  const extra = isEnglish ? [
-    ['Taunus / Offenbach / Wetterau → FRA', 'fixed price on request', 'e.g. Bad Homburg, Hofheim, Bad Vilbel, Bad Nauheim'],
-    ['Gießen / Marburg / Fulda → FRA', 'fixed price on request', 'longer routes quoted individually'],
-    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'fixed price on request', 'direct airport transfer without changing'],
-    ['Stuttgart / Karlsruhe / Heilbronn / Cologne → FRA', 'fixed price on request', 'long-distance transfer subject to availability'],
-    ['Koblenz / Neuwied / Limburg / Bad Kreuznach → FRA', 'fixed price on request', 'individual quote for the exact pickup point'],
-    ['Aschaffenburg / Dieburg / Groß-Umstadt / Seeheim-Jugenheim → FRA', 'fixed price on request', 'direct transfer to Frankfurt Airport']
-  ] : [
-    ['Taunus / Offenbach / Wetterau → FRA', 'Festpreis anfragen', 'z. B. Bad Homburg, Hofheim, Bad Vilbel, Bad Nauheim'],
-    ['Gießen / Marburg / Fulda → FRA', 'Festpreis anfragen', 'längere Strecken werden individuell kalkuliert'],
-    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'Festpreis anfragen', 'direkter Flughafentransfer ohne Umsteigen'],
-    ['Stuttgart / Karlsruhe / Heilbronn / Köln → FRA', 'Festpreis anfragen', 'Fernstrecke je nach Termin und Verfügbarkeit'],
-    ['Koblenz / Neuwied / Limburg / Bad Kreuznach → FRA', 'Festpreis anfragen', 'individuelle Kalkulation für den genauen Abholort'],
-    ['Aschaffenburg / Dieburg / Groß-Umstadt / Seeheim-Jugenheim → FRA', 'Festpreis anfragen', 'direkter Transfer zum Frankfurt Airport']
-  ];
+  appendPriceCards(grid, HOME_PRICE_GROUPS[currentLanguage()]);
+  moveXlCardToEnd(grid);
+}
 
-  extra.forEach(([route, price, note]) => {
-    const card = document.createElement('article');
-    card.className = 'price-card price-card-more';
-    card.innerHTML = `<span>${route}</span><strong>${price}</strong><small>${note}</small>`;
-    grid.appendChild(card);
+function expandFraPagePrices() {
+  const path = window.location.pathname;
+  const isEnglish = currentLanguage() === 'en';
+  const isFraPage = isEnglish
+    ? path.includes('frankfurt-airport-transfer.html')
+    : path.includes('flughafentransfer-frankfurt.html') && !path.includes('frankfurt-hahn');
+  if (!isFraPage) return;
+
+  const grid = document.querySelector('main .price-grid');
+  if (!grid || grid.dataset.expanded === 'true') return;
+  grid.dataset.expanded = 'true';
+  appendPriceCards(grid, HOME_PRICE_GROUPS[currentLanguage()]);
+  moveXlCardToEnd(grid);
+}
+
+function enhanceHahnPrices() {
+  const path = window.location.pathname;
+  const isEnglish = currentLanguage() === 'en';
+  const isHahnPage = isEnglish
+    ? path.includes('frankfurt-hahn-airport-transfer.html')
+    : path.includes('flughafentransfer-frankfurt-hahn.html');
+  if (!isHahnPage) return;
+
+  const heroPrice = document.querySelector('.page-hero .price-hook strong');
+  if (heroPrice) heroPrice.textContent = isEnglish ? 'from €149' : 'ab 149 €';
+
+  const prices = {
+    hhn_route_frankfurt: isEnglish ? 'from €149' : 'ab 149 €',
+    en_hhn_route_frankfurt: 'from €149',
+    hhn_route_mainz: isEnglish ? 'from €119' : 'ab 119 €',
+    en_hhn_route_mainz: 'from €119',
+    hhn_route_wiesbaden: isEnglish ? 'from €129' : 'ab 129 €',
+    en_hhn_route_wiesbaden: 'from €129',
+    hhn_route_offenbach: isEnglish ? 'from €159' : 'ab 159 €',
+    en_hhn_route_offenbach: 'from €159'
+  };
+
+  document.querySelectorAll('.route[data-source]').forEach((route) => {
+    const price = prices[route.dataset.source];
+    if (!price) return;
+    const label = route.querySelector('span');
+    if (label) label.textContent = `${price} · ${isEnglish ? 'Request price →' : 'Preis anfragen →'}`;
   });
 }
 
@@ -430,6 +494,11 @@ function initHomeEnhancements() {
   expandHomeFaq();
 }
 
+function initRoutePriceEnhancements() {
+  expandFraPagePrices();
+  enhanceHahnPrices();
+}
+
 function initMobileNav() {
   const toggle = document.querySelector('[data-nav-toggle]');
   const nav = document.querySelector('[data-nav]');
@@ -443,6 +512,7 @@ loadRefinementStyles();
 initGlobalNavigation();
 initSubpageHeroForm();
 initHomeEnhancements();
+initRoutePriceEnhancements();
 initConsent();
 initInquiryForms();
 initDirectWhatsAppLinks();
