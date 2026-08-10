@@ -2,8 +2,8 @@
   <title id="title">HBM</title>
   <desc id="desc">Ineinander verschachteltes HBM-Logo in der Typografie der Website</desc>
   <g fill="#0a0a0a" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700">
-    <text x="34" y="182" font-size="190">H</text>
-    <text x="148" y="160" font-size="210">B</text>
+    <text x="18" y="188" font-size="190">H</text>
+    <text x="165" y="150" font-size="210">B</text>
     <text x="195" y="231" font-size="165">M</text>
   </g>
 </svg>
