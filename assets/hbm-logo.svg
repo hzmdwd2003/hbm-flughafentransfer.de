@@ -1,6 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 106" role="img" aria-labelledby="title desc">
   <title id="title">HBM</title>
-  <desc id="desc">Minimalistisches HBM Wortlogo</desc>
-  <rect width="300" height="100" fill="none"/>
-  <text x="8" y="76" fill="#0a0a0a" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="900" letter-spacing="-7">HBM</text>
+  <desc id="desc">Individuell gezeichnetes schwarzes HBM Wortzeichen</desc>
+  <g fill="#0a0a0a">
+    <path d="M6 10h22v34h45V10h22v86H73V61H28v35H6V10Zm22 34h45l-8 17H28V44Z"/>
+    <path d="M116 10h51c23 0 37 11 37 28 0 11-6 19-17 24 14 4 22 13 22 27 0 18-14 27-39 27h-54V10Zm22 18v25h27c11 0 17-5 17-13 0-8-6-12-17-12h-27Zm0 42v28h30c12 0 18-5 18-14 0-9-6-14-18-14h-30Z"/>
+    <path d="M228 10h24l19 39 19-39h22v86h-21V47l-13 28h-15l-14-28v49h-21V10Z"/>
+  </g>
 </svg>
