@@ -2,8 +2,7 @@ const HBM = {
   whatsappNumber: '4915229547574',
   ga4Id: 'G-7REXSWTTEM',
   googleAdsId: 'AW-18239011094',
-  // Nach dem Anlegen der Google-Ads-Conversion "WhatsApp Anfrage" hier nur das Conversion-Label eintragen.
-  googleAdsConversionLabel: ''
+  googleAdsConversionLabel: '6d8ZCNG2qt8cEJbyhPlD'
 };
 
 const WHATSAPP_SOURCE_LABELS = {
