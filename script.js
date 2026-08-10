@@ -78,6 +78,15 @@ function currentLanguage() {
   return (document.documentElement.lang || 'de').toLowerCase().startsWith('en') ? 'en' : 'de';
 }
 
+function loadRefinementStyles() {
+  if (document.querySelector('link[data-hbm-refinements]')) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.dataset.hbmRefinements = 'true';
+  link.href = currentLanguage() === 'en' ? '../refinements.css' : 'refinements.css';
+  document.head.appendChild(link);
+}
+
 function loadGoogleTag() {
   if (document.querySelector('script[data-hbm-google-tag]')) return;
   const tag = document.createElement('script');
@@ -268,16 +277,157 @@ function languageTarget() {
   return '/en/';
 }
 
-function initLanguageLink() {
+function initGlobalNavigation() {
   const nav = document.querySelector('[data-nav]');
-  if (!nav || nav.querySelector('[data-language-link]')) return;
-  const link = document.createElement('a');
-  link.href = languageTarget();
-  link.dataset.languageLink = 'true';
-  link.hreflang = currentLanguage() === 'en' ? 'de' : 'en';
-  link.textContent = currentLanguage() === 'en' ? 'DE' : 'EN';
-  link.setAttribute('aria-label', currentLanguage() === 'en' ? 'Deutsche Version' : 'English version');
-  nav.appendChild(link);
+  const brand = document.querySelector('.brand');
+  if (!nav) return;
+
+  const isEnglish = currentLanguage() === 'en';
+  const path = window.location.pathname;
+  if (brand) brand.href = isEnglish ? '/en/' : '/';
+
+  const items = isEnglish ? [
+    ['/en/frankfurt-airport-transfer.html', 'Frankfurt Airport', 'frankfurt-airport-transfer'],
+    ['/en/frankfurt-hahn-airport-transfer.html', 'Frankfurt-Hahn', 'frankfurt-hahn-airport-transfer'],
+    ['/en/xl-airport-transfer.html', 'XL Transfer', 'xl-airport-transfer'],
+    ['/en/#prices', 'Prices', ''],
+    ['/en/#faq', 'FAQ', '']
+  ] : [
+    ['/flughafentransfer-frankfurt.html', 'Frankfurt Airport', 'flughafentransfer-frankfurt.html'],
+    ['/flughafentransfer-frankfurt-hahn.html', 'Frankfurt-Hahn', 'flughafentransfer-frankfurt-hahn.html'],
+    ['/xl-flughafentransfer.html', 'XL Transfer', 'xl-flughafentransfer.html'],
+    ['/#preise', 'Preise', ''],
+    ['/#faq', 'FAQ', '']
+  ];
+
+  nav.replaceChildren();
+  items.forEach(([href, label, match]) => {
+    const link = document.createElement('a');
+    link.href = href;
+    link.textContent = label;
+    if (match && path.includes(match)) link.setAttribute('aria-current', 'page');
+    nav.appendChild(link);
+  });
+
+  const languageLink = document.createElement('a');
+  languageLink.href = languageTarget();
+  languageLink.dataset.languageLink = 'true';
+  languageLink.hreflang = isEnglish ? 'de' : 'en';
+  languageLink.textContent = isEnglish ? 'DE' : 'EN';
+  languageLink.setAttribute('aria-label', isEnglish ? 'Deutsche Version' : 'English version');
+  nav.appendChild(languageLink);
+}
+
+function initSubpageHeroForm() {
+  const hero = document.querySelector('.page-hero');
+  if (!hero) return;
+  const heroInner = hero.querySelector('.wrap');
+  const form = document.querySelector('main .split > form.inquiry-card[data-inquiry-form]');
+  if (!heroInner || !form) return;
+
+  const copy = document.createElement('div');
+  copy.className = 'page-hero-copy';
+  [...heroInner.childNodes].forEach((node) => copy.appendChild(node));
+  heroInner.appendChild(copy);
+  heroInner.appendChild(form);
+  heroInner.classList.add('subpage-hero-grid');
+
+  const oldSplit = document.querySelector('main .split');
+  if (oldSplit && oldSplit.children.length === 1) oldSplit.classList.add('split-single');
+}
+
+function createAreaSection() {
+  const faq = document.querySelector('#faq');
+  if (!faq || document.querySelector('[data-service-areas]')) return;
+
+  const isEnglish = currentLanguage() === 'en';
+  const section = document.createElement('section');
+  section.className = 'section service-areas-section';
+  section.id = isEnglish ? 'service-areas' : 'einsatzgebiet';
+  section.dataset.serviceAreas = 'true';
+
+  const groups = [
+    ['Frankfurt & Offenbach', 'Frankfurt, Offenbach, Bad Vilbel, Karben, Bruchköbel, Gelnhausen, Obertshausen, Seligenstadt'],
+    ['Taunus & Main-Taunus', 'Bad Homburg, Friedrichsdorf, Hofheim, Kelkheim, Bad Soden, Kronberg'],
+    ['Wetterau & Mittelhessen', 'Bad Nauheim, Butzbach, Gießen, Marburg, Alsfeld, Bad Hersfeld, Fulda'],
+    ['Darmstadt & Südhessen', 'Darmstadt, Seeheim-Jugenheim, Pfungstadt, Ober-Ramstadt, Dieburg, Groß-Umstadt, Aschaffenburg'],
+    ['Rhein-Neckar & Pfalz', 'Mannheim, Heidelberg, Worms, Speyer, Kaiserslautern, Bad Kreuznach, Rüdesheim am Rhein, Idar-Oberstein'],
+    ['Weitere Fernstrecken', 'Limburg, Koblenz, Neuwied, Heilbronn, Pforzheim, Karlsruhe, Stuttgart, Köln']
+  ];
+
+  const cards = groups.map(([title, cities]) => `
+    <article class="area-card"><h3>${title}</h3><p>${cities}</p></article>`).join('');
+
+  section.innerHTML = `
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">${isEnglish ? 'Pickup areas' : 'Abholorte & Regionen'}</span>
+        <h2>${isEnglish ? 'Airport transfers beyond Frankfurt.' : 'Nicht nur Frankfurt: Wir fahren auch aus der Region.'}</h2>
+        <p>${isEnglish ? 'These are examples of frequently requested pickup areas. Other locations and longer routes can also be requested directly.' : 'Das sind Beispiele für häufig angefragte Abholorte. Auch andere Orte und längere Strecken kannst du direkt anfragen.'}</p>
+      </div>
+      <div class="area-grid">${cards}</div>
+      <div class="compare-strip area-cta"><div><strong>${isEnglish ? 'Your city is not listed?' : 'Dein Ort ist nicht dabei?'}</strong><p>${isEnglish ? 'Send us your pickup location and airport. We will check the route and quote a fixed price.' : 'Schick uns Abholort und Flughafen. Wir prüfen die Strecke und nennen dir einen Festpreis.'}</p></div><a class="btn btn-whatsapp" data-whatsapp data-source="${isEnglish ? 'en_prices' : 'prices_cta'}" href="https://wa.me/${HBM.whatsappNumber}?text=${encodeURIComponent(isEnglish ? 'Hello HBM, I would like a price for an airport transfer.\nPickup: \nAirport/destination: \nDate/time: ' : 'Hallo HBM, ich möchte einen Preis für einen Flughafentransfer anfragen.\nAbholort: \nFlughafen/Ziel: \nDatum/Uhrzeit: ')}" target="_blank" rel="noopener">${isEnglish ? 'Request your route' : 'Strecke anfragen'}</a></div>
+    </div>`;
+
+  faq.parentNode.insertBefore(section, faq);
+}
+
+function expandHomePrices() {
+  const priceSection = document.querySelector(currentLanguage() === 'en' ? '#prices' : '#preise');
+  const grid = priceSection?.querySelector('.price-grid');
+  if (!grid || grid.dataset.expanded === 'true') return;
+  grid.dataset.expanded = 'true';
+
+  const isEnglish = currentLanguage() === 'en';
+  const extra = isEnglish ? [
+    ['Taunus / Offenbach / Wetterau → FRA', 'fixed price on request', 'e.g. Bad Homburg, Hofheim, Bad Vilbel, Bad Nauheim'],
+    ['Gießen / Marburg / Fulda → FRA', 'fixed price on request', 'longer routes quoted individually'],
+    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'fixed price on request', 'direct airport transfer without changing'],
+    ['Stuttgart / Karlsruhe / Heilbronn / Cologne → FRA', 'fixed price on request', 'long-distance transfer subject to availability'],
+    ['Koblenz / Neuwied / Limburg / Bad Kreuznach → FRA', 'fixed price on request', 'individual quote for the exact pickup point'],
+    ['Aschaffenburg / Dieburg / Groß-Umstadt / Seeheim-Jugenheim → FRA', 'fixed price on request', 'direct transfer to Frankfurt Airport']
+  ] : [
+    ['Taunus / Offenbach / Wetterau → FRA', 'Festpreis anfragen', 'z. B. Bad Homburg, Hofheim, Bad Vilbel, Bad Nauheim'],
+    ['Gießen / Marburg / Fulda → FRA', 'Festpreis anfragen', 'längere Strecken werden individuell kalkuliert'],
+    ['Mannheim / Heidelberg / Worms / Speyer → FRA', 'Festpreis anfragen', 'direkter Flughafentransfer ohne Umsteigen'],
+    ['Stuttgart / Karlsruhe / Heilbronn / Köln → FRA', 'Festpreis anfragen', 'Fernstrecke je nach Termin und Verfügbarkeit'],
+    ['Koblenz / Neuwied / Limburg / Bad Kreuznach → FRA', 'Festpreis anfragen', 'individuelle Kalkulation für den genauen Abholort'],
+    ['Aschaffenburg / Dieburg / Groß-Umstadt / Seeheim-Jugenheim → FRA', 'Festpreis anfragen', 'direkter Transfer zum Frankfurt Airport']
+  ];
+
+  extra.forEach(([route, price, note]) => {
+    const card = document.createElement('article');
+    card.className = 'price-card price-card-more';
+    card.innerHTML = `<span>${route}</span><strong>${price}</strong><small>${note}</small>`;
+    grid.appendChild(card);
+  });
+}
+
+function expandHomeFaq() {
+  const faq = document.querySelector('#faq .faq');
+  if (!faq || faq.dataset.expanded === 'true') return;
+  faq.dataset.expanded = 'true';
+  const isEnglish = currentLanguage() === 'en';
+  const details = document.createElement('details');
+  details.innerHTML = isEnglish
+    ? '<summary>Which pickup areas do you serve?</summary><p>Besides Frankfurt, we regularly accept requests from the Rhine-Main region, the Taunus, Wetterau, Central Hesse, Darmstadt and South Hesse, as well as longer routes from Mannheim, Heidelberg, Karlsruhe, Stuttgart, Cologne and other cities. The exact fixed price is confirmed before booking.</p>'
+    : '<summary>Aus welchen Orten fahrt ihr zum Flughafen?</summary><p>Neben Frankfurt kannst du unter anderem Transfers aus Offenbach, dem Taunus, der Wetterau, Mittelhessen, Darmstadt und Südhessen sowie längere Strecken aus Mannheim, Heidelberg, Karlsruhe, Stuttgart, Köln und weiteren Orten anfragen. Den konkreten Festpreis bestätigen wir vor der Buchung.</p>';
+  faq.appendChild(details);
+
+  const longDistance = document.createElement('details');
+  longDistance.innerHTML = isEnglish
+    ? '<summary>Do you also offer long-distance airport transfers?</summary><p>Yes. Longer routes such as Mannheim, Heidelberg, Gießen, Marburg, Karlsruhe, Stuttgart, Koblenz or Cologne can be requested. Availability and price depend on the exact pickup point and travel time.</p>'
+    : '<summary>Fahrt ihr auch längere Strecken zum Flughafen?</summary><p>Ja. Auch längere Strecken wie Mannheim, Heidelberg, Gießen, Marburg, Karlsruhe, Stuttgart, Koblenz oder Köln kannst du anfragen. Verfügbarkeit und Preis hängen vom genauen Abholort und der Fahrtzeit ab.</p>';
+  faq.appendChild(longDistance);
+}
+
+function initHomeEnhancements() {
+  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  const isHome = currentLanguage() === 'en' ? (path === '/en' || path === '/en/index.html') : (path === '/' || path === '/index.html');
+  if (!isHome) return;
+  expandHomePrices();
+  createAreaSection();
+  expandHomeFaq();
 }
 
 function initMobileNav() {
@@ -289,9 +439,12 @@ function initMobileNav() {
   });
 }
 
+loadRefinementStyles();
+initGlobalNavigation();
+initSubpageHeroForm();
+initHomeEnhancements();
 initConsent();
 initInquiryForms();
 initDirectWhatsAppLinks();
 initServiceCards();
-initLanguageLink();
 initMobileNav();
