@@ -13,7 +13,8 @@
 .split.split-single>div{max-width:940px}
 
 .price-grid[data-expanded="true"]{grid-template-columns:repeat(3,1fr)}
-.price-card-more strong{font-size:28px;line-height:1.05;margin-top:24px}
+.price-grid[data-expanded="true"] .price-card strong{font-size:42px;line-height:1;letter-spacing:-.05em;margin:28px 0 7px;white-space:nowrap}
+.price-grid[data-expanded="true"] .price-card:last-child strong{font-size:36px;letter-spacing:-.04em}
 
 .service-areas-section{border-top:1px solid var(--line)}
 .area-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -38,6 +39,8 @@
   .area-card{min-height:0}
   .area-card-head{align-items:center}
   .price-grid[data-expanded="true"]{grid-template-columns:1fr}
+  .price-grid[data-expanded="true"] .price-card strong{font-size:40px}
+  .price-grid[data-expanded="true"] .price-card:last-child strong{font-size:34px}
   .card-head{align-items:flex-start}
   .card-label{flex:0 0 auto}
 }
