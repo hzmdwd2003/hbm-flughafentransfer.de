@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" role="img" aria-labelledby="title desc">
+  <title id="title">HBM</title>
+  <desc id="desc">Minimalistisches HBM Wortlogo</desc>
+  <rect width="300" height="100" fill="none"/>
+  <text x="8" y="76" fill="#0a0a0a" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="900" letter-spacing="-7">HBM</text>
+</svg>
