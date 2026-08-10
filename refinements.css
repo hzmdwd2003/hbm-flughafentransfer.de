@@ -1,0 +1,40 @@
+/* HBM refinements: consistent navigation, subpage inquiry hero, service areas */
+.card-head{align-items:center}
+.card-label{display:inline-flex;align-items:center;justify-content:center;min-height:32px;text-align:center;white-space:nowrap;line-height:1.1}
+.inquiry-card .btn-block{text-align:center;line-height:1.2;padding-inline:16px}
+
+.page-hero{padding:0;border-bottom:1px solid var(--line);background:#fff}
+.page-hero .subpage-hero-grid{min-height:650px;display:grid;grid-template-columns:1fr .88fr;gap:70px;align-items:center;padding:64px 0;max-width:none}
+.page-hero-copy{min-width:0}
+.page-hero-copy h1{max-width:760px}
+.page-hero-copy p{max-width:650px}
+.page-hero .inquiry-card{width:100%;align-self:center}
+.split.split-single{grid-template-columns:minmax(0,1fr)}
+.split.split-single>div{max-width:940px}
+
+.price-grid[data-expanded="true"]{grid-template-columns:repeat(3,1fr)}
+.price-card-more strong{font-size:28px;line-height:1.05;margin-top:24px}
+
+.service-areas-section{border-top:1px solid var(--line)}
+.area-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.area-card{border:1px solid var(--line);border-radius:var(--radius);padding:24px;background:#fff;min-height:180px}
+.area-card h3{margin:0 0 12px;font-size:20px;letter-spacing:-.025em}
+.area-card p{margin:0;color:var(--grey);font-size:14px;line-height:1.75}
+.area-cta{margin-top:28px}
+
+@media (max-width:980px){
+  .page-hero .subpage-hero-grid{grid-template-columns:1fr;gap:34px;min-height:0;padding:54px 0}
+  .page-hero-copy{max-width:780px}
+  .page-hero .inquiry-card{max-width:760px}
+  .area-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media (max-width:720px){
+  .page-hero .subpage-hero-grid{padding:42px 0;gap:28px}
+  .page-hero-copy h1{font-size:clamp(44px,14vw,68px)}
+  .area-grid{grid-template-columns:1fr}
+  .area-card{min-height:0}
+  .price-grid[data-expanded="true"]{grid-template-columns:1fr}
+  .card-head{align-items:flex-start}
+  .card-label{flex:0 0 auto}
+}
