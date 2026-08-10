@@ -2,7 +2,7 @@ const HBM = {
   whatsappNumber: '4915229547574',
   ga4Id: 'G-7REXSWTTEM',
   googleAdsId: 'AW-18239011094',
-  // Add the Google Ads conversion label here after creating the website conversion.
+  // Nach dem Anlegen der Google-Ads-Conversion "WhatsApp Anfrage" hier nur das Conversion-Label eintragen.
   googleAdsConversionLabel: ''
 };
 
@@ -51,12 +51,19 @@ function initConsent() {
   const state = localStorage.getItem('hbm_consent');
   if (state === 'granted') {
     gtag('consent', 'update', {
-      ad_storage: 'granted', analytics_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted'
+      ad_storage: 'granted',
+      analytics_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted'
     });
     loadGoogleTag();
+    document.querySelector('[data-consent-banner]')?.remove();
     return;
   }
-  if (state === 'denied') return;
+  if (state === 'denied') {
+    document.querySelector('[data-consent-banner]')?.remove();
+    return;
+  }
   const banner = document.querySelector('[data-consent-banner]');
   banner?.querySelector('[data-consent-accept]')?.addEventListener('click', grantConsent);
   banner?.querySelector('[data-consent-deny]')?.addEventListener('click', denyConsent);
@@ -64,33 +71,42 @@ function initConsent() {
 
 function trackWhatsApp(source = 'unknown', intent = 'airport_transfer') {
   if (localStorage.getItem('hbm_consent') !== 'granted') return;
+
   gtag('event', 'whatsapp_click', {
     event_category: 'lead',
     lead_source: source,
     service_intent: intent
   });
+
   gtag('event', 'generate_lead', {
-    currency: 'EUR',
-    value: 1,
     lead_source: source,
     service_intent: intent
   });
+
   if (HBM.googleAdsConversionLabel) {
     gtag('event', 'conversion', {
-      send_to: `${HBM.googleAdsId}/${HBM.googleAdsConversionLabel}`,
-      value: 1,
-      currency: 'EUR'
+      send_to: `${HBM.googleAdsId}/${HBM.googleAdsConversionLabel}`
     });
   }
 }
 
+function formatDateTime(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('de-DE', {
+    dateStyle: 'short',
+    timeStyle: 'short'
+  }).format(date);
+}
+
 function buildWhatsAppUrl(data) {
   const lines = [
-    'Hallo HBM Airport Transfer, ich möchte einen Flughafentransfer anfragen.',
-    `Service: ${data.service || 'Economy Transfer'}`,
+    'Hallo HBM, ich möchte einen Flughafentransfer anfragen.',
+    `Service: ${data.service || 'Flughafentransfer'}`,
     `Abholort: ${data.pickup || ''}`,
     `Ziel: ${data.destination || ''}`,
-    `Datum/Uhrzeit: ${data.datetime || ''}`,
+    `Datum/Uhrzeit: ${formatDateTime(data.datetime)}`,
     `Personen: ${data.passengers || ''}`,
     `Gepäck: ${data.luggage || ''}`,
     `Flugnummer: ${data.flight || ''}`
@@ -103,7 +119,7 @@ function initInquiryForms() {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const data = new FormData(form);
-      const service = form.dataset.service || data.get('service') || 'Economy Transfer';
+      const service = form.dataset.service || data.get('service') || 'Flughafentransfer';
       const url = buildWhatsAppUrl({
         service,
         pickup: data.get('pickup'),
