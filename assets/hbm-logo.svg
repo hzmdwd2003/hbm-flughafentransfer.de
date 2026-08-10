@@ -1,9 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 106" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 238 104" role="img" aria-labelledby="title desc">
   <title id="title">HBM</title>
-  <desc id="desc">Individuell gezeichnetes schwarzes HBM Wortzeichen</desc>
+  <desc id="desc">Schwarzes HBM Wortzeichen mit verbundenen Buchstaben</desc>
   <g fill="#0a0a0a">
-    <path d="M6 10h22v34h45V10h22v86H73V61H28v35H6V10Zm22 34h45l-8 17H28V44Z"/>
-    <path d="M116 10h51c23 0 37 11 37 28 0 11-6 19-17 24 14 4 22 13 22 27 0 18-14 27-39 27h-54V10Zm22 18v25h27c11 0 17-5 17-13 0-8-6-12-17-12h-27Zm0 42v28h30c12 0 18-5 18-14 0-9-6-14-18-14h-30Z"/>
-    <path d="M228 10h24l19 39 19-39h22v86h-21V47l-13 28h-15l-14-28v49h-21V10Z"/>
+    <!-- H; der rechte Stamm wird gleichzeitig zum linken Stamm des B -->
+    <path d="M8 8h18v32h42V8h18v88H68V57H26v39H8V8Z"/>
+    <!-- B greift den rechten H-Stamm auf -->
+    <path fill-rule="evenodd" d="M68 8h48c24 0 38 11 38 29 0 11-6 19-17 24 13 4 21 13 21 27 0 20-15 30-41 30H68V8Zm18 17v27h27c14 0 21-5 21-14 0-9-7-13-21-13H86Zm0 44v31h30c15 0 22-5 22-15 0-11-7-16-22-16H86Z"/>
+    <!-- M überlappt das B leicht; gemeinsamer Rhythmus ohne Zusatzsymbol -->
+    <path d="M149 8h20l22 39 22-39h19v88h-18V40l-17 30h-13l-17-30v56h-18V8Z"/>
   </g>
 </svg>
