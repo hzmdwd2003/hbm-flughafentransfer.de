@@ -9,8 +9,17 @@
 .page-hero-copy h1{max-width:760px}
 .page-hero-copy p{max-width:650px}
 .page-hero .inquiry-card{width:100%;align-self:center}
+.subpage-hero-actions{margin-top:28px}
 .split.split-single{grid-template-columns:minmax(0,1fr)}
 .split.split-single>div{max-width:940px}
+
+.return-trip{margin-top:16px;border-top:1px solid #cacac4;border-bottom:1px solid #cacac4}
+.return-trip summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:13px;font-weight:700;position:relative}
+.return-trip summary::-webkit-details-marker{display:none}
+.return-trip summary::after{content:"+";position:absolute;right:2px;top:10px;font-size:22px;font-weight:400;line-height:1}
+.return-trip[open] summary::after{content:"−"}
+.return-trip-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 0 16px}
+.return-trip-grid .field.wide{grid-column:1/-1}
 
 .price-grid[data-expanded="true"]{grid-template-columns:repeat(3,1fr)}
 .price-grid[data-expanded="true"] .price-card strong{font-size:42px;line-height:1;letter-spacing:-.05em;margin:28px 0 7px;white-space:nowrap}
@@ -35,6 +44,8 @@
 @media (max-width:720px){
   .page-hero .subpage-hero-grid{padding:42px 0;gap:28px}
   .page-hero-copy h1{font-size:clamp(44px,14vw,68px)}
+  .return-trip-grid{grid-template-columns:1fr}
+  .return-trip-grid .field.wide{grid-column:auto}
   .area-grid{grid-template-columns:1fr}
   .area-card{min-height:0}
   .area-card-head{align-items:center}
