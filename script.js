@@ -14,12 +14,14 @@ const WHATSAPP_SOURCE_LABELS = {
   footer_link: 'START-FOOTER-LINK',
   mobile_sticky: 'START-MOBILE',
   fra_header: 'FRA-HEADER',
+  fra_hero: 'FRA-HERO',
   fra_page_form: 'FRA-FORM',
   fra_prices: 'FRA-PREISE',
   fra_footer: 'FRA-FOOTER',
   fra_footer_link: 'FRA-FOOTER-LINK',
   fra_mobile: 'FRA-MOBILE',
   hhn_header: 'HHN-HEADER',
+  hhn_hero: 'HHN-HERO',
   hhn_page_form: 'HHN-FORM',
   hhn_route_frankfurt: 'HHN-FRANKFURT',
   hhn_route_mainz: 'HHN-MAINZ',
@@ -29,6 +31,7 @@ const WHATSAPP_SOURCE_LABELS = {
   hhn_footer_link: 'HHN-FOOTER-LINK',
   hhn_mobile: 'HHN-MOBILE',
   xl_header: 'XL-HEADER',
+  xl_hero: 'XL-HERO',
   xl_page_form: 'XL-FORM',
   xl_footer: 'XL-FOOTER',
   xl_footer_link: 'XL-FOOTER-LINK',
@@ -45,10 +48,12 @@ const WHATSAPP_SOURCE_LABELS = {
   en_footer_link: 'EN-START-FOOTER-LINK',
   en_mobile: 'EN-START-MOBILE',
   en_fra_header: 'EN-FRA-HEADER',
+  en_fra_hero: 'EN-FRA-HERO',
   en_fra_form: 'EN-FRA-FORM',
   en_fra_footer: 'EN-FRA-FOOTER',
   en_fra_mobile: 'EN-FRA-MOBILE',
   en_hhn_header: 'EN-HHN-HEADER',
+  en_hhn_hero: 'EN-HHN-HERO',
   en_hhn_form: 'EN-HHN-FORM',
   en_hhn_route_frankfurt: 'EN-HHN-FRANKFURT',
   en_hhn_route_mainz: 'EN-HHN-MAINZ',
@@ -57,6 +62,7 @@ const WHATSAPP_SOURCE_LABELS = {
   en_hhn_footer: 'EN-HHN-FOOTER',
   en_hhn_mobile: 'EN-HHN-MOBILE',
   en_xl_header: 'EN-XL-HEADER',
+  en_xl_hero: 'EN-XL-HERO',
   en_xl_form: 'EN-XL-FORM',
   en_xl_footer: 'EN-XL-FOOTER',
   en_xl_mobile: 'EN-XL-MOBILE'
@@ -180,8 +186,7 @@ function buildWhatsAppUrl(data) {
     `Date/time: ${formatDateTime(data.datetime)}`,
     `Passengers: ${data.passengers || ''}`,
     `Luggage: ${data.luggage || ''}`,
-    `Flight number: ${data.flight || ''}`,
-    `Ref: ${data.reference || 'WEB'}`
+    `Flight number: ${data.flight || ''}`
   ] : [
     'Hallo HBM, ich möchte einen Flughafentransfer anfragen.',
     `Service: ${data.service || 'Flughafentransfer'}`,
@@ -190,9 +195,35 @@ function buildWhatsAppUrl(data) {
     `Datum/Uhrzeit: ${formatDateTime(data.datetime)}`,
     `Personen: ${data.passengers || ''}`,
     `Gepäck: ${data.luggage || ''}`,
-    `Flugnummer: ${data.flight || ''}`,
-    `Ref: ${data.reference || 'WEB'}`
+    `Flugnummer: ${data.flight || ''}`
   ];
+
+  const hasReturnTrip = Boolean(
+    data.returnPickup || data.returnDestination || data.returnDatetime || data.returnFlight
+  );
+
+  if (hasReturnTrip) {
+    lines.push('');
+    if (isEnglish) {
+      lines.push(
+        'Return trip:',
+        `Pickup: ${data.returnPickup || ''}`,
+        `Destination: ${data.returnDestination || ''}`,
+        `Date/time: ${formatDateTime(data.returnDatetime)}`,
+        `Flight number: ${data.returnFlight || ''}`
+      );
+    } else {
+      lines.push(
+        'Rückfahrt:',
+        `Abholort: ${data.returnPickup || ''}`,
+        `Ziel: ${data.returnDestination || ''}`,
+        `Datum/Uhrzeit: ${formatDateTime(data.returnDatetime)}`,
+        `Flugnummer: ${data.returnFlight || ''}`
+      );
+    }
+  }
+
+  lines.push(`Ref: ${data.reference || 'WEB'}`);
   return `https://wa.me/${HBM.whatsappNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
@@ -211,6 +242,10 @@ function initInquiryForms() {
         passengers: data.get('passengers'),
         luggage: data.get('luggage'),
         flight: data.get('flight'),
+        returnPickup: data.get('return_pickup'),
+        returnDestination: data.get('return_destination'),
+        returnDatetime: data.get('return_datetime'),
+        returnFlight: data.get('return_flight'),
         reference: sourceReference(source)
       });
       trackWhatsApp(source, form.dataset.intent || 'airport_transfer');
@@ -318,6 +353,13 @@ function initGlobalNavigation() {
   nav.appendChild(languageLink);
 }
 
+function subpageHeroSource(form) {
+  const source = form?.dataset.source || 'subpage_form';
+  return source
+    .replace('_page_form', '_hero')
+    .replace('_form', '_hero');
+}
+
 function initSubpageHeroForm() {
   const hero = document.querySelector('.page-hero');
   if (!hero) return;
@@ -328,12 +370,119 @@ function initSubpageHeroForm() {
   const copy = document.createElement('div');
   copy.className = 'page-hero-copy';
   [...heroInner.childNodes].forEach((node) => copy.appendChild(node));
+
+  if (!copy.querySelector('.hero-actions')) {
+    const isEnglish = currentLanguage() === 'en';
+    const actions = document.createElement('div');
+    actions.className = 'hero-actions subpage-hero-actions';
+    const button = document.createElement('a');
+    button.className = 'btn btn-whatsapp';
+    button.dataset.whatsapp = '';
+    button.dataset.source = subpageHeroSource(form);
+    button.dataset.intent = form.dataset.intent || 'airport_transfer';
+    button.href = `https://wa.me/${HBM.whatsappNumber}?text=${encodeURIComponent(isEnglish
+      ? 'Hello HBM, I would like to request an airport transfer.'
+      : 'Hallo HBM, ich möchte einen Flughafentransfer anfragen.')}`;
+    button.target = '_blank';
+    button.rel = 'noopener';
+    button.textContent = isEnglish ? 'Request price via WhatsApp' : 'Preis per WhatsApp anfragen';
+    actions.appendChild(button);
+    copy.appendChild(actions);
+  }
+
   heroInner.appendChild(copy);
   heroInner.appendChild(form);
   heroInner.classList.add('subpage-hero-grid');
 
   const oldSplit = document.querySelector('main .split');
   if (oldSplit && oldSplit.children.length === 1) oldSplit.classList.add('split-single');
+}
+
+function replaceSelectWithTextInput(control, placeholder) {
+  if (!control || control.tagName !== 'SELECT') return control;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.name = control.name;
+  input.id = control.id;
+  input.className = control.className;
+  input.required = control.required;
+  input.value = control.selectedOptions?.[0]?.textContent?.trim() || '';
+  input.placeholder = placeholder;
+  control.replaceWith(input);
+  return input;
+}
+
+function makeLocationFieldsEditable(form) {
+  const isEnglish = currentLanguage() === 'en';
+  const pickupPlaceholder = isEnglish ? 'e.g. Frankfurt, Mainz, address' : 'z. B. Frankfurt, Mainz, Adresse';
+  const destinationPlaceholder = isEnglish ? 'e.g. Frankfurt Airport (FRA)' : 'z. B. Frankfurt Airport (FRA)';
+
+  let pickup = form.querySelector('[name="pickup"]');
+  let destination = form.querySelector('[name="destination"]');
+  pickup = replaceSelectWithTextInput(pickup, pickupPlaceholder);
+  destination = replaceSelectWithTextInput(destination, destinationPlaceholder);
+
+  [pickup, destination].forEach((field, index) => {
+    if (!field) return;
+    field.removeAttribute('readonly');
+    field.removeAttribute('disabled');
+    if (field.tagName === 'INPUT') field.type = 'text';
+    if (!field.placeholder) field.placeholder = index === 0 ? pickupPlaceholder : destinationPlaceholder;
+  });
+}
+
+function normalisePassengerSelect(form) {
+  const select = form.querySelector('select[name="passengers"]');
+  if (!select) return;
+  const current = Number.parseInt(select.value, 10);
+  select.replaceChildren();
+  for (let persons = 1; persons <= 8; persons += 1) {
+    const option = document.createElement('option');
+    option.value = String(persons);
+    option.textContent = String(persons);
+    select.appendChild(option);
+  }
+  select.value = current >= 1 && current <= 8 ? String(current) : '2';
+}
+
+function addReturnTripOption(form, index) {
+  if (form.querySelector('[data-return-trip]')) return;
+  const isEnglish = currentLanguage() === 'en';
+  const formGrid = form.querySelector('.form-grid');
+  const submit = form.querySelector('.form-submit');
+  if (!formGrid || !submit) return;
+
+  const details = document.createElement('details');
+  details.className = 'return-trip';
+  details.dataset.returnTrip = 'true';
+  details.innerHTML = `
+    <summary>${isEnglish ? 'Add return trip' : 'Rückfahrt hinzufügen'}</summary>
+    <div class="return-trip-grid">
+      <div class="field wide"><label for="return-pickup-${index}">${isEnglish ? 'Return pickup' : 'Abholort Rückfahrt'}</label><input id="return-pickup-${index}" name="return_pickup" type="text" placeholder="${isEnglish ? 'e.g. Frankfurt Airport (FRA)' : 'z. B. Frankfurt Airport (FRA)'}"></div>
+      <div class="field wide"><label for="return-destination-${index}">${isEnglish ? 'Return destination' : 'Ziel Rückfahrt'}</label><input id="return-destination-${index}" name="return_destination" type="text" placeholder="${isEnglish ? 'e.g. Frankfurt, address' : 'z. B. Frankfurt, Adresse'}"></div>
+      <div class="field"><label for="return-time-${index}">${isEnglish ? 'Return date & time' : 'Datum & Uhrzeit Rückfahrt'}</label><input id="return-time-${index}" name="return_datetime" type="datetime-local"></div>
+      <div class="field"><label for="return-flight-${index}">${isEnglish ? 'Return flight number' : 'Flugnummer Rückfahrt'}</label><input id="return-flight-${index}" name="return_flight" type="text" placeholder="${isEnglish ? 'e.g. LH123' : 'z. B. LH123'}"></div>
+    </div>`;
+
+  details.addEventListener('toggle', () => {
+    if (!details.open) return;
+    const outboundPickup = form.querySelector('[name="pickup"]')?.value?.trim() || '';
+    const outboundDestination = form.querySelector('[name="destination"]')?.value?.trim() || '';
+    const returnPickup = details.querySelector('[name="return_pickup"]');
+    const returnDestination = details.querySelector('[name="return_destination"]');
+    if (returnPickup && !returnPickup.value) returnPickup.value = outboundDestination;
+    if (returnDestination && !returnDestination.value) returnDestination.value = outboundPickup;
+  });
+
+  submit.parentNode.insertBefore(details, submit);
+}
+
+function initFormEnhancements() {
+  document.querySelectorAll('[data-inquiry-form]').forEach((form, index) => {
+    makeLocationFieldsEditable(form);
+    normalisePassengerSelect(form);
+    addReturnTripOption(form, index + 1);
+  });
 }
 
 const HOME_PRICE_GROUPS = {
@@ -511,6 +660,7 @@ function initMobileNav() {
 loadRefinementStyles();
 initGlobalNavigation();
 initSubpageHeroForm();
+initFormEnhancements();
 initHomeEnhancements();
 initRoutePriceEnhancements();
 initConsent();
