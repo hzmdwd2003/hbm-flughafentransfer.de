@@ -67,7 +67,7 @@ button{cursor:pointer}
 .google-review-card:hover{transform:translateY(-2px);border-color:#b9b9b3;box-shadow:0 14px 34px rgba(0,0,0,.07)}
 .google-wordmark{font-size:15px;font-weight:700;color:#4a4a47}
 .google-wordmark i{font-style:normal;font-size:22px;color:#4285f4}
-.review-stars{margin:15px 0 6px;color:#fbbc04;font-size:20px;letter-spacing:2px}
+.review-label{margin:15px 0 6px;color:var(--grey);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
 .google-review-card strong{font-size:17px}
 .review-link{margin-top:8px;color:var(--grey);font-size:13px}
 
