@@ -1,5 +1,6 @@
 const HBM = {
   whatsappNumber: '4915229547574',
+  xlWhatsappNumber: '491786287358',
   ga4Id: 'G-7REXSWTTEM',
   googleAdsId: 'AW-18239011094',
   googleAdsConversionLabel: '6d8ZCNG2qt8cEJbyhPlD'
@@ -148,6 +149,10 @@ function sourceReference(source = 'unknown') {
   return WHATSAPP_SOURCE_LABELS[source] || String(source).toUpperCase().replaceAll('_', '-');
 }
 
+function whatsappNumberForIntent(intent = 'airport_transfer') {
+  return intent === 'xl' ? HBM.xlWhatsappNumber : HBM.whatsappNumber;
+}
+
 function trackWhatsApp(source = 'unknown', intent = 'airport_transfer') {
   if (localStorage.getItem('hbm_consent') !== 'granted') return;
   gtag('event', 'whatsapp_click', {
@@ -224,7 +229,7 @@ function buildWhatsAppUrl(data) {
   }
 
   lines.push(`Ref: ${data.reference || 'WEB'}`);
-  return `https://wa.me/${HBM.whatsappNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
+  return `https://wa.me/${whatsappNumberForIntent(data.intent)}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
 function initInquiryForms() {
@@ -235,6 +240,7 @@ function initInquiryForms() {
       const source = form.dataset.source || 'inquiry_form';
       const service = form.dataset.service || data.get('service') || (currentLanguage() === 'en' ? 'Airport transfer' : 'Flughafentransfer');
       const url = buildWhatsAppUrl({
+        intent: form.dataset.intent || 'airport_transfer',
         service,
         pickup: data.get('pickup'),
         destination: data.get('destination'),
@@ -258,6 +264,7 @@ function addReferenceToDirectLink(link, source) {
   try {
     const url = new URL(link.href);
     if (url.hostname !== 'wa.me') return;
+    url.pathname = `/${whatsappNumberForIntent(link.dataset.intent)}`;
     const fallback = currentLanguage() === 'en'
       ? 'Hello HBM, I would like to request an airport transfer.'
       : 'Hallo HBM, ich möchte einen Flughafentransfer anfragen.';
@@ -380,7 +387,7 @@ function initSubpageHeroForm() {
     button.dataset.whatsapp = '';
     button.dataset.source = subpageHeroSource(form);
     button.dataset.intent = form.dataset.intent || 'airport_transfer';
-    button.href = `https://wa.me/${HBM.whatsappNumber}?text=${encodeURIComponent(isEnglish
+    button.href = `https://wa.me/${whatsappNumberForIntent(button.dataset.intent)}?text=${encodeURIComponent(isEnglish
       ? 'Hello HBM, I would like to request an airport transfer.'
       : 'Hallo HBM, ich möchte einen Flughafentransfer anfragen.')}`;
     button.target = '_blank';

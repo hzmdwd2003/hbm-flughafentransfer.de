@@ -64,19 +64,23 @@ button{cursor:pointer}
 
 
 .social-proof{border-bottom:1px solid var(--line);background:var(--soft);padding:38px 0}
-.social-proof-grid{display:grid;grid-template-columns:1.35fr .65fr .8fr;gap:18px;align-items:stretch}
+.social-proof-grid{display:grid;grid-template-columns:minmax(0,1.35fr) repeat(2,minmax(0,.75fr));gap:18px;align-items:stretch}
 .social-proof-intro{padding:18px 24px 18px 0}
 .social-proof-intro .eyebrow{margin-bottom:10px}
 .social-proof-intro h2{margin:0;font-size:clamp(30px,4vw,48px);line-height:1;letter-spacing:-.045em}
 .social-proof-intro p{max-width:650px;margin:16px 0 0;color:#50504d}
-.proof-stat,.google-review-card{display:flex;flex-direction:column;justify-content:center;min-height:190px;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:#fff}
-.proof-stat strong{font-size:38px;line-height:1;letter-spacing:-.04em}
-.proof-stat span{margin-top:10px;color:var(--grey);font-size:14px}
+.proof-stat,.google-review-card{box-sizing:border-box;display:grid;grid-template-rows:auto 1fr auto;min-width:0;min-height:190px;height:100%;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:#fff}
+.proof-card-label,.google-wordmark{min-height:22px}
+.proof-card-label{color:var(--grey);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.proof-card-body{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:18px 0}
+.proof-stat .proof-card-body strong{font-size:38px;line-height:1;letter-spacing:-.04em}
+.proof-stat .proof-card-body span{margin-top:8px;color:var(--grey);font-size:14px}
+.proof-card-footer{color:var(--grey);font-size:12px;font-weight:700}
 .google-review-card{transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
 .google-review-card:hover{transform:translateY(-2px);border-color:#b9b9b3;box-shadow:0 14px 34px rgba(0,0,0,.07)}
 .google-wordmark{font-size:15px;font-weight:700;color:#4a4a47}
 .google-wordmark i{font-style:normal;font-size:22px;color:#4285f4}
-.review-stars{margin:13px 0 5px;color:#fbbc04;font-size:19px;letter-spacing:2px}
+.review-stars{margin:0 0 5px;color:#fbbc04;font-size:19px;letter-spacing:2px}
 .google-review-card strong{font-size:17px}
 .review-score{font-size:24px;letter-spacing:-.03em}
 .review-link{margin-top:8px;color:var(--grey);font-size:13px}
